@@ -61,6 +61,8 @@ loop {
   monthly_payment = (loan_amount * (mpr/(1-(1+mpr)**(-loan_duration_in_months)))).round(2)
   prompt(messages('result'))
   puts "#{monthly_payment} USD"
+  # another solution to format the result with 2 decimals would be
+  # puts "#{format('%.2f', monthly_payment)} USD"
 
 prompt("Do you want to do another computation? Yes / No")
 answer = gets.chomp.downcase
