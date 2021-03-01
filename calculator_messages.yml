@@ -1,0 +1,36 @@
+{en: 
+{welcome: "Welcome to Calculator! Enter your name:", 
+valid_name: "Make sure to enter a valid name.",
+hello: "Hi ",
+number_entry: "Please pick two different numbers.",
+wrong_numbers: "You have to pick valid numbers, do it again.",
+select_operation: "Choose the operation you want to do: 1) add 2) subtract 3) multiply 4) divide",
+wrong_operation: "You must pick a number between 1 and 4, do it again.",
+one: "Adding the two numbers...",
+two: "Subtracting the two numbers...",
+three: "Multiplying the two numbers...",
+four: "Dividing the two numbers...",
+result: "The result is:",
+zero_division: "You cannot divide by 0, do it again.",
+continue: "Do you wish to continue? Yes / No"
+
+}
+, 
+fr: 
+{welcome: "Bienvenue dans la calculatrice, entrez votre nom:", 
+valid_name: "Veuillez entrez un nom valide.",
+hello: "Bonjour ",
+number_entry: "Veuillez choisir deux nombres s'il vous plaît.",
+wrong_numbers: "Vous devez choisir des nombres valides, recommencez.",
+select_operation: "Selectionnez l'opération de votre choix: 1) addition 2) soustraction 3) multiplication 4) division",
+wrong_operation: "Vous devez choisir un chiffre entre 1 et 4, recommencez.",
+one: "Addition des deux nombres...",
+two: "Soustraction des deux nombres...",
+three: "Multiplication des deux nombres...",
+four: "Division des deux nombres...",
+result: "Le résultat est :",
+zero_division: "Vous ne pouvez pas diviser par 0, recommencez.",
+continue: "Voulez-vous continuer? Oui / Non"
+
+}}
+
