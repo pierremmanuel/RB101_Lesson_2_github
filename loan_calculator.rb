@@ -23,7 +23,7 @@ end
 
 prompt(messages('welcome'))
 
-loop {
+loop do
   loan_amount = nil
   prompt(messages('enter_loan'))
   loop do
@@ -54,17 +54,18 @@ loop {
   end
   years = years.to_i
   months = months.to_i
-  loan_duration = years + (months/12)
+  loan_duration = years + (months / 12)
 
   mpr = apr / 12
   loan_duration_in_months = loan_duration * 12
-  monthly_payment = (loan_amount * (mpr/(1-(1+mpr)**(-loan_duration_in_months)))).round(2)
+  monthly_payment = (loan_amount *
+                    (mpr / (1 - (1 + mpr)**(-loan_duration_in_months)))).round(2)
   prompt(messages('result'))
   puts "#{monthly_payment} USD"
   # another solution to format the result with 2 decimals would be
   # puts "#{format('%.2f', monthly_payment)} USD"
 
-prompt("Do you want to do another computation? Yes / No")
-answer = gets.chomp.downcase
-break unless answer.start_with?('y')
-}
+  prompt("Do you want to do another computation? Yes / No")
+  answer = gets.chomp.downcase
+  break unless answer.start_with?('y')
+end
