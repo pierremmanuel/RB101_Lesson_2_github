@@ -1,0 +1,8 @@
+{welcome: "Welcome to your mortgage calculator!",
+enter_loan: "Please enter the amount of your loan outstanding in USD:",
+invalid_input1: "You must enter a valid number. Please enter the amount of your loan:",
+apr_entry: "What is your Annual Percentage Rate? (or APR) Note: Do not include the '%' sign in your answer.",
+invalid_input2: "You did not enter a valid amount. Please enter it again. Note: Do not include the '%' in your answer.",
+duration_entry: "What is the duration of your loan? Please enter first your answer in years, then enter the remaining months.",
+invalid_input3: "You must enter valid durations without commas or letters. Please enter it again.",
+result: "Your monthly payment will be: "} 
