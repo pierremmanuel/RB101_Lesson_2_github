@@ -1,16 +1,17 @@
 VALID_CHOICES = %w(rock paper scissors lizard spock)
+VALID_SHORTCUTS = %w(r p s l sp)
+WINNING_POINTS = 5
 
 def prompt(message)
-  puts "=> #{message}
-  "
+  puts "=> #{message}"
 end
 
-def wins?(first, second)
-  first == 'rock' && (second == 'scissors' || second == 'lizard') ||
-  first == 'scissors' && (second == 'paper' || second == 'lizard') ||
-  first == 'paper' && (second == 'rock' || second == 'spock') ||
-  first == 'lizard' && (second == 'spock' || second == 'paper') ||
-  first == 'spock' && (second == 'rock' || second == 'scissors')
+def wins?(player, computer)
+  player == 'r' && (computer == 's' || computer == 'l') ||
+  player == 's' && (computer == 'p' || computer == 'l') ||
+  player == 'p' && (computer == 'r' || computer == 'sp') ||
+  player == 'l' && (computer == 'sp' || computer == 'p') ||
+  player == 'sp' && (computer == 'r' || computer == 's')
 end
 
 def shortcut_to_choice(shortcut)
@@ -28,70 +29,72 @@ def shortcut_to_choice(shortcut)
   end
 end
 
-def display_results(player, computer)
+def results(player, computer)
   if wins?(player, computer)
-    puts 'You won!'
+    "You won!"
   elsif wins?(computer, player)
-    puts "Computer won"
+    "Computer won!"
   else
-    puts "It's a tie!"
+    "It's a tie!"
   end
 end
 
-puts <<-MSG
-
-Welcome to rock, paper, scissors, lizard, spock!
-The rules are simple:
-You play against the computer, first one who reaches 5 points wins!
-Good luck!
-
-MSG
+prompt("Welcome to rock, paper, scissors, lizard, spock! \
+The rules are simple: You play against the computer, \
+the first one who reaches #{WINNING_POINTS} points wins! \
+Good luck!")
+puts()
 
 loop do
 
   player_score = 0
   computer_score = 0
-  
+
   loop do
-    choice = nil
+    choice = ''
+
       loop do
-        prompt("Choose one: #{VALID_CHOICES.join(', ')}, pick a shortcut: 'r', 'p', 's', 'l' or 'sp':")
-        choice = Kernel.gets().chomp()
-
-        if VALID_CHOICES.include?(shortcut_to_choice(choice))
-          break
-        else
-          puts "That's not a valid choice."
-        end
+        prompt("Pick a shortcut: #{VALID_SHORTCUTS.join(', ')} for #{VALID_CHOICES.join(', ')}:")
+        choice = gets.chomp
+        puts()
+        VALID_SHORTCUTS.include?(choice) ? break : (puts "That's not a valid choice.")
       end
 
-    computer_choice = ['rock', 'paper', 'scissors', 'lizard', 'spock'].sample
+    computer_choice = VALID_SHORTCUTS.sample
 
-    puts "You chose: #{shortcut_to_choice(choice)}; Computer chose: #{computer_choice}"
+    prompt("You chose: #{shortcut_to_choice(choice)} \
+            Computer chose: #{shortcut_to_choice(computer_choice)}")
 
-    display_results(shortcut_to_choice(choice), computer_choice)
+    prompt(results(choice, computer_choice))
 
-    if wins?(shortcut_to_choice(choice), computer_choice)
+    if results(choice, computer_choice) == "You won!"
       player_score += 1
-      prompt("Your score is #{player_score}; Computer's score is #{computer_score}!")
-      if player_score == 5
-        puts "You won the game, congratulatons!"
-        break
-      end
-    elsif wins?(computer_choice, shortcut_to_choice(choice))
+      prompt("YOU: #{player_score}! \
+             COMPUTER: #{computer_score}!")
+      puts()
+    elsif results(choice, computer_choice) == "Computer won!"
       computer_score += 1
-      puts "Your score is #{player_score}; Computer's score is #{computer_score}!"
-      if computer_score == 5
-        puts "You lost the game, too bad!"
-        break
-      end
+      prompt("YOU: #{player_score}! \
+             COMPUTER: #{computer_score}!")
+      puts()
     else
-      puts "Your score is #{player_score}; Computer's score is #{computer_score}!"
+      prompt("YOU: #{player_score}! \
+            COMPUTER: #{computer_score}!")
+      puts()
     end
+
+    break if player_score == WINNING_POINTS || computer_score == WINNING_POINTS
+
+  end
+
+  if player_score == WINNING_POINTS
+    prompt("Congratulations, you won that game! Next time it will be different!")
+  else
+    prompt("That's OK, you will be better next time! ;)")
   end
 
   prompt("Do you want to play again?")
-  answer = Kernel.gets().chomp()
+  answer = gets.chomp
   break unless answer.downcase().start_with?('y')
 
 end
