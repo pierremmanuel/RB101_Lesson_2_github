@@ -1,17 +1,22 @@
 VALID_CHOICES = %w(rock paper scissors lizard spock)
-SHORTCUTS = %w(r p s l sp)
+SHORTCUTS = %w(r p sc l sp)
 WINNING_POINTS = 5
 
 def prompt(message)
   puts "=> #{message}"
 end
 
+def clear_screen
+  system('clear')
+end
+
 def wins?(player, computer)
-  player == 'rock' && (computer == 'scissors' || computer == 'lizard') ||
-    player == 'scissors' && (computer == 'paper' || computer == 'lizard') ||
-    player == 'paper' && (computer == 'rock' || computer == 'spock') ||
-    player == 'lizard' && (computer == 'spock' || computer == 'paper') ||
-    player == 'spock' && (computer == 'rock' || computer == 'scissors')
+  winning_moves = { scissors: %w(paper lizard),
+                    rock: %w(lizard scissors),
+                    paper: %w(rock spock),
+                    lizard: %w(paper spock),
+                    spock: %w(rock scissors) }
+  winning_moves[player.to_sym].include?(computer)
 end
 
 def shortcut_to_choice(shortcut)
@@ -20,7 +25,7 @@ def shortcut_to_choice(shortcut)
     "rock"
   when "p"
     "paper"
-  when "s"
+  when "sc"
     "scissors"
   when "l"
     "lizard"
@@ -39,22 +44,32 @@ def results(player, computer)
   end
 end
 
-welcome_message = <<-TXT
-Welcome to rock, paper, scissors, lizard, spock!
-The rules are simple: You play against the computer,
-the first one who reaches #{WINNING_POINTS} points wins!
-Good luck!
+
+rules_message = <<-TXT
+RULES
+>> The game is very simple: you play against the computer and you must pick one
+>> amongst rock, paper, scissors, lizard, spock.
+>> The first one who reaches #{WINNING_POINTS} points is the champion!
+>> Good luck!
 TXT
 
 selection_message = <<-TXT
 Pick a shortcut: #{SHORTCUTS.join(', ')}
-or #{VALID_CHOICES.join(', ')}:
+>> (or #{VALID_CHOICES.join(', ')}):
 TXT
 
-prompt(welcome_message)
+clear_screen()
+prompt("Welcome to ROCK, PAPER, SCISSORS, LIZARD, SPOCK!")
+name = ''
+loop do
+  prompt("What's your name?")
+  name = gets.chomp.upcase
+  break unless name.empty?
+  puts(">> You have to pick something!")
+end
 puts()
-prompt("Please enter your name:")
-name = gets.chomp.upcase!
+prompt(rules_message)
+puts()
 
 loop do
   player_score = 0
@@ -93,13 +108,23 @@ loop do
     break if player_score == WINNING_POINTS || computer_score == WINNING_POINTS
   end
 
+  clear_screen()
+
   if player_score == WINNING_POINTS
     prompt("Congratulations #{name.capitalize}, you won that game!")
+    prompt("Your final score is #{player_score}, \
+    computer final score is #{computer_score}")
   else
     prompt("Don't worry #{name.capitalize}, you will be better next time! ;)")
+    prompt("Your final score is #{player_score}, \
+computer final score is #{computer_score}")
   end
 
-  prompt("Do you want to play again?")
+  prompt("Do you want to play again? 'yes' / 'no'")
   answer = gets.chomp
-  break unless answer.downcase().start_with?('y')
+  break unless answer.downcase.start_with?('y')
 end
+
+clear_screen()
+
+prompt("Thanks for playing! Come back soon!")
