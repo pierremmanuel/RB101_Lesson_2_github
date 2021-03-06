@@ -1,5 +1,5 @@
 VALID_CHOICES = %w(rock paper scissors lizard spock)
-VALID_SHORTCUTS = %w(r p s l sp)
+SHORTCUTS = %w(r p s l sp)
 WINNING_POINTS = 5
 
 def prompt(message)
@@ -7,25 +7,25 @@ def prompt(message)
 end
 
 def wins?(player, computer)
-  player == 'r' && (computer == 's' || computer == 'l') ||
-  player == 's' && (computer == 'p' || computer == 'l') ||
-  player == 'p' && (computer == 'r' || computer == 'sp') ||
-  player == 'l' && (computer == 'sp' || computer == 'p') ||
-  player == 'sp' && (computer == 'r' || computer == 's')
+  player == 'rock' && (computer == 'scissors' || computer == 'lizard') ||
+    player == 'scissors' && (computer == 'paper' || computer == 'lizard') ||
+    player == 'paper' && (computer == 'rock' || computer == 'spock') ||
+    player == 'lizard' && (computer == 'spock' || computer == 'paper') ||
+    player == 'spock' && (computer == 'rock' || computer == 'scissors')
 end
 
 def shortcut_to_choice(shortcut)
   case shortcut
   when "r"
-    return "rock"
+    "rock"
   when "p"
-    return "paper"
+    "paper"
   when "s"
-    return "scissors"
+    "scissors"
   when "l"
-    return "lizard"
+    "lizard"
   when "sp"
-    return "spock"
+    "spock"
   end
 end
 
@@ -39,62 +39,67 @@ def results(player, computer)
   end
 end
 
-prompt("Welcome to rock, paper, scissors, lizard, spock! \
-The rules are simple: You play against the computer, \
-the first one who reaches #{WINNING_POINTS} points wins! \
-Good luck!")
+welcome_message = <<-TXT
+Welcome to rock, paper, scissors, lizard, spock!
+The rules are simple: You play against the computer,
+the first one who reaches #{WINNING_POINTS} points wins!
+Good luck!
+TXT
+
+selection_message = <<-TXT
+Pick a shortcut: #{SHORTCUTS.join(', ')}
+or #{VALID_CHOICES.join(', ')}:
+TXT
+
+prompt(welcome_message)
 puts()
+prompt("Please enter your name:")
+name = gets.chomp.upcase!
 
 loop do
-
   player_score = 0
   computer_score = 0
 
   loop do
     choice = ''
 
-      loop do
-        prompt("Pick a shortcut: #{VALID_SHORTCUTS.join(', ')} for #{VALID_CHOICES.join(', ')}:")
-        choice = gets.chomp
-        puts()
-        VALID_SHORTCUTS.include?(choice) ? break : (puts "That's not a valid choice.")
-      end
+    loop do
+      prompt(selection_message)
+      choice = gets.chomp
+      puts()
+      break if VALID_CHOICES.include?(choice)
+      SHORTCUTS.include?(choice) ? break : (puts "That's not a valid choice.")
+    end
 
-    computer_choice = VALID_SHORTCUTS.sample
+    choice = shortcut_to_choice(choice) if SHORTCUTS.include?(choice)
 
-    prompt("You chose: #{shortcut_to_choice(choice)} \
-            Computer chose: #{shortcut_to_choice(computer_choice)}")
+    computer_choice = VALID_CHOICES.sample
+
+    prompt("You chose: #{choice} ------ Computer chose: #{computer_choice}")
 
     prompt(results(choice, computer_choice))
 
     if results(choice, computer_choice) == "You won!"
       player_score += 1
-      prompt("YOU: #{player_score}! \
-             COMPUTER: #{computer_score}!")
-      puts()
+      prompt("#{name}: #{player_score} ------ COMPUTER: #{computer_score}")
     elsif results(choice, computer_choice) == "Computer won!"
       computer_score += 1
-      prompt("YOU: #{player_score}! \
-             COMPUTER: #{computer_score}!")
-      puts()
+      prompt("#{name}: #{player_score} ------ COMPUTER: #{computer_score}")
     else
-      prompt("YOU: #{player_score}! \
-            COMPUTER: #{computer_score}!")
-      puts()
+      prompt("#{name}: #{player_score} ------ COMPUTER: #{computer_score}")
     end
+    puts()
 
     break if player_score == WINNING_POINTS || computer_score == WINNING_POINTS
-
   end
 
   if player_score == WINNING_POINTS
-    prompt("Congratulations, you won that game! Next time it will be different!")
+    prompt("Congratulations #{name.capitalize}, you won that game!")
   else
-    prompt("That's OK, you will be better next time! ;)")
+    prompt("Don't worry #{name.capitalize}, you will be better next time! ;)")
   end
 
   prompt("Do you want to play again?")
   answer = gets.chomp
   break unless answer.downcase().start_with?('y')
-
 end
