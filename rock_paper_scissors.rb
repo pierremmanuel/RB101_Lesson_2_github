@@ -137,9 +137,8 @@ loop do
     if SHORTCUTS.include?(choices[:player])
 
     choices[:computer] = VALID_CHOICES.sample
-    # I tried to avoid screen cleaning for the last point by lines no.141 and no. 142 don't work...
-    clear_screen() unless ((scores[:player] == WINNING_POINTS || \
-    scores[:computer]) == WINNING_POINTS)
+    # I tried to avoid screen cleaning for the last round but line no.141 doesn't work...
+    clear_screen() unless scores[:player] == WINNING_POINTS || scores[:computer] == WINNING_POINTS
 
     display_choices(choices)
     prompt(results(choices))
@@ -151,7 +150,7 @@ loop do
       "------ COMPUTER: #{scores[:computer]}")
     puts()
 
-    break if (scores[:player] || scores[:computer]) == WINNING_POINTS
+    break if scores[:player] == WINNING_POINTS || scores[:computer] == WINNING_POINTS
   end
 
   clear_screen()
@@ -161,4 +160,5 @@ loop do
   clear_screen()
 end
 
+clear_screen()
 prompt("Thanks for playing! Come back soon!")
