@@ -71,6 +71,7 @@ def shortcut_to_choice(shortcut)
 end
 
 def display_choices(choices)
+  clear_screen()
   prompt("You chose: #{choices[:player]} ------ " \
     "Computer chose: #{choices[:computer]}")
 end
@@ -99,7 +100,13 @@ def new_computer_score(choices, scores)
   scores[:computer]
 end
 
-def game_over?(scores, player_name)
+def display_scores(player_name, scores)
+  prompt("#{player_name}: #{scores[:player]} " \
+    "------ COMPUTER: #{scores[:computer]}")
+  puts()
+end
+
+def display_final_results(scores, player_name)
   if scores[:player] == WINNING_POINTS
     prompt("Congratulations #{player_name.capitalize}," \
             "you won that game!")
@@ -113,10 +120,19 @@ def game_over?(scores, player_name)
   end
 end
 
+def game_over?(scores)
+scores[:player] == WINNING_POINTS || scores[:computer] == WINNING_POINTS
+end
+
 def play_again?
   prompt("Do you want to play again? 'yes' / 'no'")
   answer = gets.chomp
   return true if answer.downcase.start_with?('y')
+end
+
+def display_end_message
+  clear_screen()
+  prompt("Thanks for playing! Come back soon!")
 end
 
 clear_screen()
@@ -137,8 +153,6 @@ loop do
     if SHORTCUTS.include?(choices[:player])
 
     choices[:computer] = VALID_CHOICES.sample
-    # I tried to avoid screen cleaning for the last round but line no.141 doesn't work...
-    clear_screen() unless scores[:player] == WINNING_POINTS || scores[:computer] == WINNING_POINTS
 
     display_choices(choices)
     prompt(results(choices))
@@ -146,19 +160,15 @@ loop do
     scores[:player] = new_player_score(choices, scores)
     scores[:computer] = new_computer_score(choices, scores)
 
-    prompt("#{player_name}: #{scores[:player]} " \
-      "------ COMPUTER: #{scores[:computer]}")
-    puts()
+    display_scores(player_name, scores)
 
-    break if scores[:player] == WINNING_POINTS || scores[:computer] == WINNING_POINTS
+    break if game_over?(scores)
   end
-
-  clear_screen()
-  game_over?(scores, player_name)
+  
+  display_final_results(scores, player_name)
   break unless play_again?()
   scores = { player: 0, computer: 0 }
   clear_screen()
 end
 
-clear_screen()
-prompt("Thanks for playing! Come back soon!")
+display_end_message()
